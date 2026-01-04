@@ -6,8 +6,6 @@ import com.example.dataConsumer.domain.port.QueryDslStreamingPort;
 import com.example.dataConsumer.streaming.RowConsumer;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class StreamingUseCase {
 
@@ -24,13 +22,10 @@ public class StreamingUseCase {
         execute();
     }
 
-    private void execute() {
-        int fetchSize = 0;
+    private void execute() throws Exception {
+        RowConsumer<CustomerEntity> customerConsumer = customer ->
+                System.out.println(customer.getId());
 
-        List<CustomerEntity> list = queryDslStreamingPort.findActiveCustomers();
-
-        for(CustomerEntity customer : list) {
-            System.out.println(customer.getId());
-        }
+        queryDslStreamingPort.streamActiveCustomers(customerConsumer);
     }
 }
