@@ -1,9 +1,9 @@
 package com.example.dataConsumer.querydsl;
 
 import com.example.dataConsumer.streaming.RowConsumer;
-import com.querydsl.core.types.EntityPath;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
+import com.querydsl.sql.RelationalPath;
 import java.util.Objects;
 import java.util.function.Supplier;
 import org.springframework.stereotype.Component;
@@ -25,9 +25,7 @@ public class QueryDslSqlStreamingExecutor {
             throws Exception {
         Objects.requireNonNull(querySupplier, "querySupplier must not be null");
         Objects.requireNonNull(consumer, "consumer must not be null");
-        int effectiveFetchSize = fetchSize > 0 ? fetchSize : DEFAULT_FETCH_SIZE;
         SQLQuery<T> query = querySupplier.get();
-        query.setFetchSize(effectiveFetchSize);
         try (var iterator = query.iterate()) {
             while (iterator.hasNext()) {
                 consumer.accept(iterator.next());
@@ -35,7 +33,7 @@ public class QueryDslSqlStreamingExecutor {
         }
     }
 
-    public <T> Supplier<SQLQuery<T>> selectAll(EntityPath<T> entityPath) {
-        return () -> sqlQueryFactory.selectFrom(entityPath);
+    public <T> Supplier<SQLQuery<T>> selectAll(RelationalPath<T> relationalPath) {
+        return () -> sqlQueryFactory.selectFrom(relationalPath);
     }
 }
