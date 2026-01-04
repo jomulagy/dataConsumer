@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dataConsumer.mybatis.mapper.StreamingTestMapper">
+
+    <resultMap id="customerResult" type="com.example.dataConsumer.domain.model.CustomerEntity">
+        <id property="id" column="id" />
+        <result property="email" column="email" />
+        <result property="status" column="status" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <resultMap id="orderLineResult" type="com.example.dataConsumer.domain.model.OrderLineEntity">
+        <id property="orderId" column="order_id" />
+        <id property="lineNo" column="line_no" />
+        <result property="sku" column="sku" />
+        <result property="quantity" column="quantity" />
+        <result property="amount" column="amount" />
+    </resultMap>
+
+    <select id="selectCustomersForStreaming" resultMap="customerResult">
+        SELECT id, email, status, created_at
+        FROM customer
+        ORDER BY id
+    </select>
+
+    <select id="selectOrderLinesForStreaming" resultMap="orderLineResult">
+        SELECT order_id, line_no, sku, quantity, amount
+        FROM order_line
+        ORDER BY order_id, line_no
+    </select>
+
+    <select id="selectSingleCustomer" parameterType="long" resultMap="customerResult">
+        SELECT id, email, status, created_at
+        FROM customer
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectSingleOrderLine" parameterType="map" resultMap="orderLineResult">
+        SELECT order_id, line_no, sku, quantity, amount
+        FROM order_line
+        WHERE order_id = #{orderId}
+          AND line_no = #{lineNo}
+    </select>
+</mapper>
