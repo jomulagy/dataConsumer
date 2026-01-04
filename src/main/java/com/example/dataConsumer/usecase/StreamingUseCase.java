@@ -28,7 +28,6 @@ public class StreamingUseCase {
 
         myBatisStreamingPort.streamCustomers(fetchSize, customerConsumer);
         myBatisStreamingPort.streamOrderLines(fetchSize, orderLineConsumer);
-        queryDslStreamingPort.streamCustomers(fetchSize, customerConsumer);
-        queryDslStreamingPort.streamOrderLines(fetchSize, orderLineConsumer);
+        queryDslStreamingPort.findActiveCustomers();
     }
 }

@@ -1,36 +1,27 @@
 package com.example.dataConsumer.querydsl.adapter;
 
 import com.example.dataConsumer.domain.model.CustomerEntity;
-import com.example.dataConsumer.domain.model.OrderLineEntity;
 import com.example.dataConsumer.domain.port.QueryDslStreamingPort;
-import com.example.dataConsumer.querydsl.QueryDslSqlStreamingExecutor;
 import com.example.dataConsumer.querydsl.schema.QCustomerEntity;
-import com.example.dataConsumer.querydsl.schema.QOrderLineEntity;
-import com.example.dataConsumer.streaming.RowConsumer;
 import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class QueryDslStreamingAdapter implements QueryDslStreamingPort {
 
-    private final QueryDslSqlStreamingExecutor streamingExecutor;
     private final SQLQueryFactory sqlQueryFactory;
     private final QCustomerEntity customer = QCustomerEntity.customer;
-    private final QOrderLineEntity orderLine = QOrderLineEntity.orderLine;
 
-    public QueryDslStreamingAdapter(QueryDslSqlStreamingExecutor streamingExecutor,
-            SQLQueryFactory sqlQueryFactory) {
-        this.streamingExecutor = streamingExecutor;
+    public QueryDslStreamingAdapter(SQLQueryFactory sqlQueryFactory) {
         this.sqlQueryFactory = sqlQueryFactory;
     }
 
     @Override
-    public void streamCustomers(int fetchSize, RowConsumer<CustomerEntity> consumer) throws Exception {
-        streamingExecutor.stream(fetchSize, () -> sqlQueryFactory.selectFrom(customer), consumer);
-    }
-
-    @Override
-    public void streamOrderLines(int fetchSize, RowConsumer<OrderLineEntity> consumer) throws Exception {
-        streamingExecutor.stream(fetchSize, () -> sqlQueryFactory.selectFrom(orderLine), consumer);
+    public List<CustomerEntity> findActiveCustomers() {
+        return sqlQueryFactory.selectFrom(customer)
+                .where(customer.status.eq("ACTIVE"))
+                .fetch();
     }
 }
