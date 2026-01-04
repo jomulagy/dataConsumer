@@ -1,7 +1,6 @@
 package com.example.dataConsumer.config;
 
 import com.example.dataConsumer.mybatis.PostgreSqlFetchSizeInterceptor;
-import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +15,8 @@ public class MyBatisFetchSizeConfiguration {
 
     @Bean
     public ConfigurationCustomizer configurationCustomizer(PostgreSqlFetchSizeInterceptor interceptor) {
-        return new ConfigurationCustomizer() {
-            @Override
-            public void customize(Configuration configuration) {
-                configuration.addInterceptor(interceptor);
-            }
+        return configuration -> {
+            configuration.setDefaultFetchSize(1000);
         };
     }
 }
