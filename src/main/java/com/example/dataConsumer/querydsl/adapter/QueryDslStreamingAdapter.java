@@ -7,7 +7,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 import static com.example.dataConsumer.domain.model.QCustomerEntity.customerEntity;
 
@@ -19,12 +20,14 @@ public class QueryDslStreamingAdapter implements QueryDslStreamingPort {
 
     @Override
     public void streamActiveCustomers(RowConsumer<CustomerEntity> consumer) throws Exception {
-        List<CustomerEntity> customers = sqlQueryFactory.selectFrom(customerEntity)
+        try (Stream<CustomerEntity> stream = sqlQueryFactory.selectFrom(customerEntity)
                 .where(customerEntity.status.eq("ACTIVE"))
-                .fetch();
+                .stream()) {
 
-        for (CustomerEntity customer : customers) {
-            consumer.accept(customer);
+            Iterator<CustomerEntity> iterator = stream.iterator();
+            while (iterator.hasNext()) {
+                consumer.accept(iterator.next());
+            }
         }
     }
 }
