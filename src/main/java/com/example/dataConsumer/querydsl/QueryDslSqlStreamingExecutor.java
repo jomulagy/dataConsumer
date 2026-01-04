@@ -26,6 +26,8 @@ public class QueryDslSqlStreamingExecutor {
         Objects.requireNonNull(querySupplier, "querySupplier must not be null");
         Objects.requireNonNull(consumer, "consumer must not be null");
         SQLQuery<T> query = querySupplier.get();
+        int effectiveFetchSize = fetchSize > 0 ? fetchSize : DEFAULT_FETCH_SIZE;
+        query.fetchSize(effectiveFetchSize);
         try (var iterator = query.iterate()) {
             while (iterator.hasNext()) {
                 consumer.accept(iterator.next());
