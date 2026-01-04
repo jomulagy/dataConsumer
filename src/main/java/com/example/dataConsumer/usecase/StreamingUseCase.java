@@ -21,13 +21,9 @@ public class StreamingUseCase {
         execute();
     }
 
-    private void execute() throws Exception {
+    private void execute() {
         int fetchSize = 0;
-        var customerConsumer = RowConsumer.noop();
-        var orderLineConsumer = RowConsumer.noop();
 
-        myBatisStreamingPort.streamCustomers(fetchSize, customerConsumer);
-        myBatisStreamingPort.streamOrderLines(fetchSize, orderLineConsumer);
         queryDslStreamingPort.findActiveCustomers();
     }
 }
