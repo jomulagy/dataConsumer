@@ -3,12 +3,10 @@ package com.example.dataConsumer.querydsl.adapter;
 import com.example.dataConsumer.domain.model.CustomerEntity;
 import com.example.dataConsumer.domain.port.QueryDslStreamingPort;
 import com.example.dataConsumer.streaming.RowConsumer;
+import com.querydsl.core.CloseableIterator;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Iterator;
-import java.util.stream.Stream;
 
 import static com.example.dataConsumer.domain.model.QCustomerEntity.customerEntity;
 
@@ -20,11 +18,9 @@ public class QueryDslStreamingAdapter implements QueryDslStreamingPort {
 
     @Override
     public void streamActiveCustomers(RowConsumer<CustomerEntity> consumer) throws Exception {
-        try (Stream<CustomerEntity> stream = sqlQueryFactory.selectFrom(customerEntity)
+        try (CloseableIterator<CustomerEntity> iterator = sqlQueryFactory.selectFrom(customerEntity)
                 .where(customerEntity.status.eq("ACTIVE"))
-                .stream()) {
-
-            Iterator<CustomerEntity> iterator = stream.iterator();
+                .iterate()) {
             while (iterator.hasNext()) {
                 consumer.accept(iterator.next());
             }
