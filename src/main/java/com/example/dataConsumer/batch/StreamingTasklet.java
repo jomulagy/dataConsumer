@@ -21,7 +21,7 @@ public class StreamingTasklet implements Tasklet {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        streamingUseCase.executeUseCase(2000);
+        streamingUseCase.executeUseCase();
         return RepeatStatus.FINISHED;
     }
 }

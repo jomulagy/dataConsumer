@@ -17,11 +17,12 @@ public class StreamingUseCase {
         this.queryDslStreamingPort = queryDslStreamingPort;
     }
 
-    public void executeUseCase(int fetchSize) throws Exception {
-        execute(fetchSize);
+    public void executeUseCase() throws Exception {
+        execute();
     }
 
-    private void execute(int fetchSize) throws Exception {
+    private void execute() throws Exception {
+        int fetchSize = 0;
         var customerConsumer = RowConsumer.noop();
         var orderLineConsumer = RowConsumer.noop();
 
