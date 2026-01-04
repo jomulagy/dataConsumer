@@ -1,10 +1,9 @@
 package com.example.dataConsumer.domain.port;
 
 import com.example.dataConsumer.domain.model.CustomerEntity;
-
-import java.util.List;
+import com.example.dataConsumer.streaming.RowConsumer;
 
 public interface QueryDslStreamingPort {
 
-    List<CustomerEntity> findActiveCustomers();
+    void streamActiveCustomers(RowConsumer<CustomerEntity> consumer) throws Exception;
 }
