@@ -1,11 +1,11 @@
 package com.example.dataConsumer.querydsl.adapter;
 
-import com.example.dataConsumer.domain.model.CustomerRecord;
-import com.example.dataConsumer.domain.model.OrderLineRecord;
+import com.example.dataConsumer.domain.model.CustomerEntity;
+import com.example.dataConsumer.domain.model.OrderLineEntity;
 import com.example.dataConsumer.domain.port.QueryDslStreamingPort;
 import com.example.dataConsumer.querydsl.QueryDslSqlStreamingExecutor;
-import com.example.dataConsumer.querydsl.table.QCustomerRecord;
-import com.example.dataConsumer.querydsl.table.QOrderLineRecord;
+import com.example.dataConsumer.querydsl.table.QCustomerEntity;
+import com.example.dataConsumer.querydsl.table.QOrderLineEntity;
 import com.example.dataConsumer.streaming.RowConsumer;
 import com.querydsl.core.types.Projections;
 import org.springframework.stereotype.Component;
@@ -14,19 +14,19 @@ import org.springframework.stereotype.Component;
 public class QueryDslStreamingAdapter implements QueryDslStreamingPort {
 
     private final QueryDslSqlStreamingExecutor streamingExecutor;
-    private final QCustomerRecord customer = QCustomerRecord.customerRecord;
-    private final QOrderLineRecord orderLine = QOrderLineRecord.orderLineRecord;
+    private final QCustomerEntity customer = QCustomerEntity.customer;
+    private final QOrderLineEntity orderLine = QOrderLineEntity.orderLine;
 
     public QueryDslStreamingAdapter(QueryDslSqlStreamingExecutor streamingExecutor) {
         this.streamingExecutor = streamingExecutor;
     }
 
     @Override
-    public void streamCustomers(int fetchSize, RowConsumer<CustomerRecord> consumer) throws Exception {
+    public void streamCustomers(int fetchSize, RowConsumer<CustomerEntity> consumer) throws Exception {
         streamingExecutor.stream(fetchSize, () -> streamingExecutor
                 .selectAll(customer)
                 .get()
-                .select(Projections.constructor(CustomerRecord.class,
+                .select(Projections.constructor(CustomerEntity.class,
                         customer.id,
                         customer.email,
                         customer.status,
@@ -34,11 +34,11 @@ public class QueryDslStreamingAdapter implements QueryDslStreamingPort {
     }
 
     @Override
-    public void streamOrderLines(int fetchSize, RowConsumer<OrderLineRecord> consumer) throws Exception {
+    public void streamOrderLines(int fetchSize, RowConsumer<OrderLineEntity> consumer) throws Exception {
         streamingExecutor.stream(fetchSize, () -> streamingExecutor
                 .selectAll(orderLine)
                 .get()
-                .select(Projections.constructor(OrderLineRecord.class,
+                .select(Projections.constructor(OrderLineEntity.class,
                         orderLine.orderId,
                         orderLine.lineNo,
                         orderLine.sku,

@@ -1,7 +1,7 @@
 package com.example.dataConsumer.batch;
 
-import com.example.dataConsumer.domain.model.CustomerRecord;
-import com.example.dataConsumer.domain.model.OrderLineRecord;
+import com.example.dataConsumer.domain.model.CustomerEntity;
+import com.example.dataConsumer.domain.model.OrderLineEntity;
 import com.example.dataConsumer.streaming.RowConsumer;
 import com.example.dataConsumer.usecase.StreamingUseCase;
 import org.springframework.batch.core.StepContribution;
@@ -24,10 +24,10 @@ public class StreamingTasklet implements Tasklet {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        RowConsumer<CustomerRecord> customerConsumer = row -> {
+        RowConsumer<CustomerEntity> customerConsumer = row -> {
             // replace with domain logic; placeholder avoids accumulating results
         };
-        RowConsumer<OrderLineRecord> orderLineConsumer = row -> {
+        RowConsumer<OrderLineEntity> orderLineConsumer = row -> {
             // replace with domain logic; placeholder avoids accumulating results
         };
 

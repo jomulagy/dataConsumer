@@ -1,7 +1,7 @@
 package com.example.dataConsumer.mybatis.adapter;
 
-import com.example.dataConsumer.domain.model.CustomerRecord;
-import com.example.dataConsumer.domain.model.OrderLineRecord;
+import com.example.dataConsumer.domain.model.CustomerEntity;
+import com.example.dataConsumer.domain.model.OrderLineEntity;
 import com.example.dataConsumer.domain.port.MyBatisStreamingPort;
 import com.example.dataConsumer.mybatis.MyBatisStreamingExecutor;
 import com.example.dataConsumer.streaming.RowConsumer;
@@ -20,12 +20,12 @@ public class MyBatisStreamingAdapter implements MyBatisStreamingPort {
     }
 
     @Override
-    public void streamCustomers(int fetchSize, RowConsumer<CustomerRecord> consumer) throws Exception {
+    public void streamCustomers(int fetchSize, RowConsumer<CustomerEntity> consumer) throws Exception {
         streamingExecutor.stream(CUSTOMER_STATEMENT, null, fetchSize, consumer);
     }
 
     @Override
-    public void streamOrderLines(int fetchSize, RowConsumer<OrderLineRecord> consumer) throws Exception {
+    public void streamOrderLines(int fetchSize, RowConsumer<OrderLineEntity> consumer) throws Exception {
         streamingExecutor.stream(ORDER_LINE_STATEMENT, null, fetchSize, consumer);
     }
 }
