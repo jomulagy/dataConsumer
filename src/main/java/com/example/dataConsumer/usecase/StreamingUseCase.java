@@ -19,6 +19,14 @@ public class StreamingUseCase {
         this.queryDslStreamingPort = queryDslStreamingPort;
     }
 
+    public void executeUseCase(int fetchSize, RowConsumer<CustomerEntity> customerConsumer,
+            RowConsumer<OrderLineEntity> orderLineConsumer) throws Exception {
+        streamMyBatisCustomers(fetchSize, customerConsumer);
+        streamMyBatisOrderLines(fetchSize, orderLineConsumer);
+        streamQueryDslCustomers(fetchSize, customerConsumer);
+        streamQueryDslOrderLines(fetchSize, orderLineConsumer);
+    }
+
     public void streamMyBatisCustomers(int fetchSize, RowConsumer<CustomerEntity> consumer) throws Exception {
         myBatisStreamingPort.streamCustomers(fetchSize, consumer);
     }

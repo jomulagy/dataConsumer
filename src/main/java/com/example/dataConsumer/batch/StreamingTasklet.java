@@ -31,10 +31,7 @@ public class StreamingTasklet implements Tasklet {
             // replace with domain logic; placeholder avoids accumulating results
         };
 
-        streamingUseCase.streamMyBatisCustomers(2000, customerConsumer);
-        streamingUseCase.streamMyBatisOrderLines(2000, orderLineConsumer);
-        streamingUseCase.streamQueryDslCustomers(2000, customerConsumer);
-        streamingUseCase.streamQueryDslOrderLines(2000, orderLineConsumer);
+        streamingUseCase.executeUseCase(2000, customerConsumer, orderLineConsumer);
         return RepeatStatus.FINISHED;
     }
 }
