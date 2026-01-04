@@ -1,8 +1,9 @@
 package com.example.dataConsumer.batch;
 
+import com.example.dataConsumer.domain.model.CustomerRecord;
+import com.example.dataConsumer.domain.model.OrderLineRecord;
 import com.example.dataConsumer.streaming.RowConsumer;
 import com.example.dataConsumer.usecase.StreamingUseCase;
-import java.util.Map;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -23,10 +24,17 @@ public class StreamingTasklet implements Tasklet {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        RowConsumer<Map<String, Object>> loggingConsumer = row -> {
+        RowConsumer<CustomerRecord> customerConsumer = row -> {
             // replace with domain logic; placeholder avoids accumulating results
         };
-        streamingUseCase.streamWithMyBatis("sampleMapper.selectForStreaming", Map.of(), 1000, loggingConsumer);
+        RowConsumer<OrderLineRecord> orderLineConsumer = row -> {
+            // replace with domain logic; placeholder avoids accumulating results
+        };
+
+        streamingUseCase.streamMyBatisCustomers(2000, customerConsumer);
+        streamingUseCase.streamMyBatisOrderLines(2000, orderLineConsumer);
+        streamingUseCase.streamQueryDslCustomers(2000, customerConsumer);
+        streamingUseCase.streamQueryDslOrderLines(2000, orderLineConsumer);
         return RepeatStatus.FINISHED;
     }
 }

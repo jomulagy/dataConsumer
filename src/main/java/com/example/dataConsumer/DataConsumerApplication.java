@@ -4,10 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DataCounsumerApplication {
+public class DataConsumerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DataCounsumerApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(DataConsumerApplication.class, args);
+    }
 }
