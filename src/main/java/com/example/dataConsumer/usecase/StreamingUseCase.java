@@ -1,9 +1,12 @@
 package com.example.dataConsumer.usecase;
 
+import com.example.dataConsumer.domain.model.CustomerEntity;
 import com.example.dataConsumer.domain.port.MyBatisStreamingPort;
 import com.example.dataConsumer.domain.port.QueryDslStreamingPort;
 import com.example.dataConsumer.streaming.RowConsumer;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class StreamingUseCase {
@@ -24,6 +27,10 @@ public class StreamingUseCase {
     private void execute() {
         int fetchSize = 0;
 
-        queryDslStreamingPort.findActiveCustomers();
+        List<CustomerEntity> list = queryDslStreamingPort.findActiveCustomers();
+
+        for(CustomerEntity customer : list) {
+            System.out.println(customer.getId());
+        }
     }
 }
